@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\Role;
+use App\Enums\UserStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,6 +19,13 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('role')->default(Role::USER->value)->index();
+            $table->string('status')->default(UserStatus::ACTIVE->value)->index();
+            $table->unsignedBigInteger('owner_id')->nullable()->index(); // If role = CUSTOMER, this field stores which user (role USER) this customer belongs to (no FK constraint, just an ID)
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
+            $table->string('iframe_map')->nullable();
+            $table->text('content')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
